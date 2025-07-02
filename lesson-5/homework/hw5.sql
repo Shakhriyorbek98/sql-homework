@@ -1,1 +1,2 @@
-lesson 5
+create database ProductName;
+use ProductName
