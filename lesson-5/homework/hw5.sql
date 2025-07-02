@@ -1,4 +1,9 @@
-SELECT ProductName,
-       StockQuantity,
-       IIF(StockQuantity > 100, 'Yes', 'No') AS StockStatus
-FROM Products_Discounted;
+create database Lesson_5_homework;
+use Lesson_5_homework
+
+Create table Products (
+ProductName varchar(50)
+);
+
+Select *from Products
+Select ProductName as Name from Products
