@@ -1,140 +1,180 @@
-/*1. Define the following terms: data, database, relational database, and table.*/ 
-Data refers to raw facts, figures, or values that have not yet been processed or interpreted.
+----------------------------lesson_10_homeworks-----------------------------
 
-A database is an organized collection of data that is stored and accessed electronically. 
-It allows users to store, manage, retrieve, and manipulate data efficiently.
+/*1.Using the Employees and Departments tables, write a query to return the names and salaries of 
+employees whose salary is greater than 50000, along with their department names.  */
 
-A relational database is a type of database that stores data in tables with rows and columns. 
-Relationships between data are established using keys (like primary and foreign keys). 
-It follows the relational model introduced by E.F. Codd.
+select e.departmentid, Name, salary, DepartmentName  from employees e join departments d on e.DepartmentID=d.DepartmentID
+where salary >50000
 
-A table is a structured set of data in a relational database, organized into rows (records) and columns (fields). 
-Each table usually represents one entity (like Customers, Products, or Orders).
+/*2. Using the Customers and Orders tables, write a query to display customer names and 
+order dates for orders placed in the year 2023.*/
 
-/*2. List five key features of SQL Server.*/
-
-1. Relational Database Management
-2. Transact-SQL (T-SQL) Support
-3. Security Features
-4. High Availability and Disaster Recovery (HADR)
-5. Integration Services and Tools
+select firstname+' '+lastname name, orderdate from customers c join orders o on c.customerid=o.customerid
+where year(orderdate)=2023
 
 
-/*3. What are the different authentication modes available when connecting to SQL Server? (Give at least 2)*/
+/*3. Using the Employees and Departments tables, write a query to show all employees along with their department names. 
+Include employees who do not belong to any department.*/
 
-1. Windows Authentication
+select name, DepartmentName from employees e join departments d on e.departmentid=d.departmentid
 
-- Uses the Windows user account credentials to connect.
-- Relies on the Windows security system (Active Directory) to manage access.
-- More secure and manageable in enterprise environments.
-- No need to store passwords in SQL Server.
+/*4. Using the Products and Suppliers tables, write a query to list all suppliers and the products they supply. 
+Show suppliers even if they don’t supply any product.*/
 
-2. 2. SQL Server Authentication
-- Uses SQL Server-specific login credentials (username and password stored in SQL Server).
-- Independent of Windows accounts.
-- Useful when connecting from non-Windows systems or when mixed environment is needed.
+select suppliername, productname from products p join suppliers s on p.SupplierID=s.SupplierID
 
-/* 4. Create a new database in SSMS named SchoolDB.*/
+/*5. Using the Orders and Payments tables, write a query to return all orders and their corresponding payments. 
+Include orders without payments and payments not linked to any order.*/
 
-create database SchoolDB
-GO
+select  o.OrderID,
+    o.CustomerID,
+    o.OrderDate,
+    p.PaymentID,
+    p.PaymentDate,
+    p.Amount from orders o join payments p on o.orderid=p.orderid
 
-/*5. Write and execute a query to create a table called Students with columns: 
-StudentID (INT, PRIMARY KEY), Name (VARCHAR(50)), Age (INT).*/
 
-create table Students (StudentID int primary key, Name varchar(50), Age int)
+/*6. Using the Employees table, write a query to show each employee's name along with the name of their manager.*/
 
-/*6. Describe the differences between SQL Server, SSMS, and SQL.*/
+	select em1.name, em2.name from employees em1 left join employees em2 on em1.managerid=em2.employeeid
+	
+/*7. Using the Students, Courses, and Enrollments tables, 
+write a query to list the names of students who are enrolled in the course named 'Math 101'.*/
 
-1. SQL Server
-What it is: A Relational Database Management System (RDBMS) developed by Microsoft.
--Purpose: Stores, manages, and processes data.
--Key Features: Security, transaction support, indexing, high availability, and more.
--Example: You install SQL Server on a server or PC to host and manage databases like SchoolDB.
 
-2. SSMS (SQL Server Management Studio)
-What it is: A graphical user interface (GUI) tool for managing SQL Server.
--Purpose: Allows users to interact with SQL Server — write queries, create tables, manage backups, users, and more.
--Key Features: Query editor, object explorer, visual database tools.
--Example: You open SSMS to connect to SQL Server and run SQL commands.
 
-3. SQL (Structured Query Language)
-What it is: A language used to communicate with relational databases.
--Purpose: Used to create, read, update, and delete data (CRUD operations) and define database structures.
--Key Features: Universal standard supported by most databases (including SQL Server, MySQL, PostgreSQL).
 
-/* 7. Research and explain the different SQL commands: DQL, DML, DDL, DCL, TCL with examples. */
 
-1. DQL (Data Query Language)
-Purpose: Retrieve data from the database.
-Main Command:
-SELECT – used to query data from tables.
 
-2. DML (Data Manipulation Language)
-Purpose: Modify data inside existing tables.
-Main Commands:
-INSERT – add new data
-UPDATE – modify existing data
-DELETE – remove data
 
-3. DDL (Data Definition Language)
-Purpose: Define or modify the structure of the database and its objects.
-Main Commands:
-CREATE – create tables, databases, etc.
-ALTER – change table structure
-DROP – delete table or database
-TRUNCATE – remove all data from a table (faster than DELETE)
+/*8. Using the Customers and Orders tables, write a query to find customers who have placed an order with more than 3 items. 
+Return their name and the quantity they ordered.*/
+	
 
-4. DCL (Data Control Language)
-Purpose: Control access and permissions on database objects.
-Main Commands:
-GRANT – give permissions
-REVOKE – take back permissions
+	select firstname, lastname, quantity from customers c left join orders o on c.customerid=o.customerid
+	where quantity >3
 
-5. TCL (Transaction Control Language)
-Purpose: Manage transactions, i.e., group of SQL operations treated as a single unit.
-Main Commands:
-COMMIT – save changes
-ROLLBACK – undo changes
-SAVEPOINT – mark a point for partial rollback
-BEGIN TRANSACTION – start a transaction
+	
+/*9. Using the Employees and Departments tables, write a query to list employees working in the 'Human Resources' department.*/
 
-/* 8. Write a query to insert three records into the Students table. */
+select name, departmentname from employees e left join departments d on e.departmentid=d.departmentid
+where d.departmentname='human resources'
 
-INSERT INTO Students (StudentID, Name, Age)
-VALUES
-    (1, 'Ali', 20, 'Computer Science'),
-    (2, 'Zarina', 22, 'Mathematics'),
-    (3, 'Jasur', 21, 'Physics');
 
-/* 9. Restore AdventureWorksDW2022.bak file to your server. 
-(write its steps to submit) You can find the database from this link :
-https://github.com/Microsoft/sql-server-samples/releases/download/adventureworks/AdventureWorksDW2022.bak */
+/*10. Using the Employees and Departments tables, write a query to return department names that have more than 5 employees.*/
 
-Step 1: Download the .bak File
-Go to this official link:
-🔗 Download AdventureWorksDW2022.bak
+	select d.departmentname, count(e.employeeid) from employees e  join departments d on e.departmentid=d.departmentid 
+	group by d.departmentname having count (e.employeeid)>5 
 
-Step 2: Move the File to SQL Server Backup Folder (Optional but Recommended)
-Move the .bak file to SQL Server’s default backup directory:
+/*11. Using the Products and Sales tables, write a query to find products that have never been sold.*/
 
-Step 3: Open SSMS and Connect to SQL Server
-Open SQL Server Management Studio (SSMS)
-Connect to your SQL Server instance
+	select productname, s.productid from products p left join sales s on p.productid=s.productid
+	where saleid is null
 
-Step 4: Restore the Database via GUI
-In Object Explorer, right-click on Databases → Restore Database...
-Select Device, then click the ... button
-Click Add, and browse to your .bak file location
-Select AdventureWorksDW2022.bak and click OK
-Ensure the Destination database is set to AdventureWorksDW2022
-(Optional) In the Files tab, adjust the file paths if needed (e.g., to a valid data/log file directory)
-Click OK to start the restore process
+/*12. Using the Customers and Orders tables, write a query to return customer names who have placed at least one order.*/
 
-Step 5 (Alternative): Restore Using T-SQL Script
-If you prefer using SQL:
-RESTORE DATABASE AdventureWorksDW2022
-FROM DISK = 'C:\Backups\AdventureWorksDW2022.bak'
-WITH MOVE 'AdventureWorksDW2022_Data' TO 'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\AdventureWorksDW2022.mdf',
-     MOVE 'AdventureWorksDW2022_Log' TO 'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\AdventureWorksDW2022_log.ldf',
-     REPLACE;
+select firstname, lastname, quantity from customers c left join orders o on c.customerid=o.customerid
+where quantity>=1
+
+/*13. Using the Employees and Departments tables, 
+write a query to show only those records where both employee and department exist (no NULLs).*/
+
+	select name, departmentname from employees e left join departments d on e.departmentid=d.departmentid
+	where departmentname is not null
+
+/*14. Using the Employees table, write a query to find pairs of employees who report to the same manager.*/
+
+	select e1.name as employee1, e2.name as employee2, e1.managerid, e3.name as managername from employees e1 join employees e2 on e1.managerid=e2.managerid join employees e3 on e1.managerid=e3.managerid
+	where e1.employeeid < e2.employeeid
+
+/*15. Using the Orders and Customers tables, write a query to list all orders placed in 2022 along with the customer name. */
+
+	select orderid, orderdate, firstname, lastname from orders o left join customers c on o.customerid=c.customerid
+	where year(orderdate)=2022
+	
+/*16. Using the Employees and Departments tables, 
+write a query to return employees from the 'Sales' department whose salary is above 60000.*/
+
+select name as employeename, salary,  from employees e join departments d on e.departmentid=d.departmentid
+where d.departmentname = 'sales' and e.salary > 60000
+
+/*17. Using the Orders and Payments tables, 
+write a query to return only those orders that have a corresponding payment. */
+
+	select p.orderid, orderdate, paymentdate, amount from orders o inner join payments p on o.orderid=p.orderid
+
+
+/*18. Using the Products and Orders tables, write a query to find products that were never ordered. */
+
+select p.productid, productname, orderid from products p left join orders o on p.productid=o.productid
+where orderid is null
+
+/*19. Using the Employees table, write a query to find employees whose salary is greater than 
+the average salary in their own departments.*/
+
+
+
+select name, salary from employees e1 
+where e1.salary> (select avg(e2.salary) from employees e2 where e1.departmentid=e2.departmentid);
+
+/* 20. Using the Orders and Payments tables, 
+write a query to list all orders placed before 2020 that have no corresponding payment.*/ 
+	
+	select o.orderid, orderdate from orders o left join payments p on o.orderid=p.orderid
+	where paymentid is null and year(orderdate)< 2020
+
+/* 21. Using the Products and Categories tables, 
+write a query to return products that do not have a matching category. */
+
+select productid, productname from products p left join categories c on p.category=c.categoryname
+where category is null
+
+/*22. Using the Employees table, 
+write a query to find employees who report to the same manager and earn more than 60000.*/
+
+
+	SELECT 
+    e1.EmployeeID AS Employee1_ID,
+    e1.Name AS Employee1_Name,
+    e2.EmployeeID AS Employee2_ID,
+    e2.Name AS Employee2_Name,
+    e1.ManagerID,
+    m.Name AS ManagerName
+FROM 
+    Employees e1
+JOIN 
+    Employees e2 ON e1.ManagerID = e2.ManagerID
+                 AND e1.EmployeeID < e2.EmployeeID
+JOIN 
+    Employees m ON e1.ManagerID = m.EmployeeID
+WHERE 
+    e1.Salary > 60000 AND e2.Salary > 60000;
+
+/*23. Using the Employees and Departments tables, 
+write a query to return employees who work in departments which name starts with the letter 'M'.*/
+
+	select name, departmentname from employees e left join departments d on e.departmentid=d.departmentid
+	where departmentname like 'M%'
+
+/*24. Using the Products and Sales tables, 
+write a query to list sales where the amount is greater than 500, including product names. */
+
+select saleid, productname, saleamount from products p left join sales s on p.productid=s.productid
+where saleamount >500
+
+
+/*25. Using the Students, Courses, and Enrollments tables, 
+write a query to find students who have not enrolled in the course 'Math 101'. */
+
+
+
+/*26. Using the Orders and Payments tables, write a query to return orders that are missing payment details.*/
+
+select *from orders o left join payments p on o.orderid=p.orderid
+where paymentid is null
+
+/*27. Using the Products and Categories tables, 
+write a query to list products that belong to either the 'Electronics' or 'Furniture' category.*/
+
+	select *from products p left join categories c on p.category=c.categoryname
+	where categoryname in ('electronics', 'furniture')
