@@ -47,3 +47,4 @@
 	sb.subject_name=e.subject_name
 	group by s.student_id, student_name, sb.subject_name
 	order by s.student_id, sb.subject_name
+
